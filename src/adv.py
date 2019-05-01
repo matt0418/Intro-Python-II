@@ -1,4 +1,5 @@
 from room import Room
+from player import Player
 
 # Declare all the rooms
 
@@ -38,9 +39,50 @@ room['treasure'].s_to = room['narrow']
 #
 
 # Make a new player object that is currently in the 'outside' room.
+newPlayer = Player('Lols', room['outside'].name)
+
 
 # Write a loop that:
-#
+
+
+# user = input("[North] North [East] East [South] South [West] West [Q] Press q to quit\n")
+
+def room_setup():
+    for i in room:
+        if newPlayer.current_room == room[i].name:
+            print()
+            print(f"{newPlayer.name} is in the")
+            print(room[i].name)
+            print()
+            print(room[i].description)
+            print()
+            print("What direction would you like to go?")
+            for d in ['n_to', 's_to', 'e_to', 'w_to']:
+                r = getattr(room[i], d, False)
+                if r is not False:
+                    print(f'To move to {r.name}, enter {d} ')
+            return room[i]
+
+
+def move_me(currentRoom, move):
+    moving = move + '_to'
+    d = getattr(currentRoom, moving)
+    newPlayer.current_room = d.name
+    print(newPlayer.current_room)
+    return newPlayer
+
+def start_game():
+    in_treasure_room = False
+    while in_treasure_room is False:
+        starting_room = room_setup()
+        new_move = input('Enter direction to go, [n] [s] [e] or [w] or [q] to quit the game')
+        moved_player = move_me(starting_room, new_move)
+        if (moved_player.current_room == 'Treasure Chamber'):
+            in_treasure_room = True
+
+start_game()
+print('You won the game')
+    
 # * Prints the current room name
 # * Prints the current description (the textwrap module might be useful here).
 # * Waits for user input and decides what to do.

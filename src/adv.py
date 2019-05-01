@@ -66,8 +66,8 @@ def room_setup():
 
 def move_me(currentRoom, move):
     moving = move + '_to'
-    d = getattr(currentRoom, moving)
-    newPlayer.current_room = d.name
+    newRoom = getattr(currentRoom, moving, False)
+    newPlayer.current_room = newRoom.name
     print(newPlayer.current_room)
     return newPlayer
 
@@ -76,8 +76,10 @@ def start_game():
     while in_treasure_room is False:
         starting_room = room_setup()
         new_move = input('Enter direction to go, [n] [s] [e] or [w] or [q] to quit the game')
+        if new_move == "q":
+            break
         moved_player = move_me(starting_room, new_move)
-        if (moved_player.current_room == 'Treasure Chamber'):
+        if moved_player.current_room == 'Treasure Chamber':
             in_treasure_room = True
 
 start_game()
